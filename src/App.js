@@ -3,6 +3,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './style.css';
+import Alert from 'react-bootstrap/Alert';
 
 class App extends React.Component {
  constructor(props) {
@@ -10,7 +11,9 @@ class App extends React.Component {
    this.state={
      searchQuery: '',
      location: {},
-     map: ''
+     map: '',
+     errors: '',
+     displayAlert: false
    }
  }
  
@@ -27,27 +30,38 @@ class App extends React.Component {
    const answer = await axios.get(MAP);
    console.log(this.state.map);
    this.setState({map: answer.config.url})
+   this.setState({displayAlert: false})
  }
+   identify(error){
+     this.setState({errors: error.response.answer, displayAlert: true, map: '', location: {}})
+   }
+
  
   render () {
     return (
         <>
-      <Form onSubmit={this.getLocation}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Location</Form.Label>
-          <Form.Control onChange={(e) => this.setState({ searchQuery: e.target.value })}
-          placeholder='type city name here...' type='text' />
-          <Form.Text className="text-muted">
-          Location: {this.state.location.display_name}<br />
-          Location latitude: {this.state.location.lat}<br />
-          Location longitude: {this.state.location.lon}<br />
-          <img src={this.state.map} alt='map of selected city'/>
-          </Form.Text>
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Explore!
-        </Button>
-      </Form>
+          <Alert show={this.state.displayAlert} variant='warning'>
+            <Alert.Heading>Oops! Somthing went wrong...</Alert.Heading>
+            Error code {this.state.errors}: Cannot process geocode
+            <Button variant='warning' onClick={this.state.displayAlert}></Button>
+          </Alert>
+
+          <Form onSubmit={this.getLocation}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Location</Form.Label>
+              <Form.Control onChange={(e) => this.setState({ searchQuery: e.target.value })}
+            placeholder='type city name here...' type='text' />
+              <Form.Text className="text-muted">
+                Location: {this.state.location.display_name}<br />
+                Location latitude: {this.state.location.lat}<br />
+                Location longitude: {this.state.location.lon}<br />
+                <img src={this.state.map} alt='map of selected city'/>
+              </Form.Text>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+            Explore!
+            </Button>
+        </Form>
       </>
     );
   }
