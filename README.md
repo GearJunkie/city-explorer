@@ -6,7 +6,7 @@ Jesse Dills
 
 ## Overview
 
-This app will allow the user to select a location and get information based of their request that will display information about that location, as well as a map to explore the area they chose.
+This app will allow the user to select a location and get information about it, as well as a map to explore the area they selected. Another feature of this app will allow the user to get a weather update for the location that they selected.
 
 ## Architecture
 
@@ -17,4 +17,5 @@ This app will allow the user to select a location and get information based of t
 ## Credit and Collaborations
 
 Anvay Bhanap
+Peter Luna
 
