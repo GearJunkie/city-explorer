@@ -41,7 +41,7 @@ class App extends React.Component {
           Location: {this.state.location.display_name}<br />
           Location latitude: {this.state.location.lat}<br />
           Location longitude: {this.state.location.lon}<br />
-          <img src={this.state.map} alt='map image of selected city'/>
+          <img src={this.state.map} alt='map of selected city'/>
           </Form.Text>
         </Form.Group>
         <Button variant="primary" type="submit">
