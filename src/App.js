@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import './style.css';
 
 class App extends React.Component {
  constructor(props) {
@@ -30,12 +31,7 @@ class App extends React.Component {
  
   render () {
     return (
-      <>
-      {/* <input onChange={(e) => this.setState({ searchQuery: e.target.value })}
-      placeholder='type city name here...' type='text' />
-      <button onClick={this.getLocation}>Explore!</button> */}
-   
-
+        <>
       <Form onSubmit={this.getLocation}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Location</Form.Label>
@@ -53,7 +49,6 @@ class App extends React.Component {
         </Button>
       </Form>
       </>
-
     );
   }
 }
