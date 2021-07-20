@@ -1,3 +1,16 @@
+// 1 - import modules
+// 2 - setup your component class
+// 3 - setup some state in my component constructor
+// 4 - create a shell method for actions -> today, i need to get the location -> shell method is getLocation() { // TODO: get location data }
+// 5 - render out hardcoded sample data, check to make sure the component renders -> render() { return ( <h1>hello</h1> ) }
+// 6 - render out a few state lines in your final output -> <h1>{this.state.whatever}</h1>
+// 7 - fill in your getLocation method with a request to get the location data from your backend
+// 8 - this.setState with that data
+// 9 - your component <h1> should render that state information
+// 10 - repeat 7-9 as needed with new state properties/display on the page
+
+
+//1 - import modules
 import React from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -5,9 +18,11 @@ import Button from 'react-bootstrap/Button';
 import './style.css';
 import Alert from 'react-bootstrap/Alert';
 
+//2 - setup component class
 class App extends React.Component {
  constructor(props) {
    super(props);
+//3 - setup some state in component constructor
    this.state={
      searchQuery: '',
      location: {},
@@ -15,26 +30,39 @@ class App extends React.Component {
      errors: '',
      displayAlert: false
    }
+   this.getLocation=this.getLocation.bind(this);
+   this.closeAlert=this.closeAlert.bind(this);
  }
  
- getLocation = async (e) => {
-   e.preventDefault();
-   const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_EXPLORER}&q=${this.state.searchQuery}&format=json`;
+ //4 - create shell method(s) for actions
 
-   const response = await axios.get(API);
-   console.log('Location IQ Data:', response)
-   this.setState({ location: response.data[0] })
-   
-   const MAP = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_EXPLORER}&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`;
-
-   const answer = await axios.get(MAP);
-   console.log(this.state.map);
-   this.setState({map: answer.config.url})
-   this.setState({displayAlert: false})
+getLocation = async (e) => {
+  try{
+    
+    e.preventDefault();
+    const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_EXPLORER}&q=${this.state.searchQuery}&format=json`;
+    
+    const response = await axios.get(API)
+    // console.log('Location IQ Data:', response)
+    this.setState({location: response.data[0]})
+    
+    const MAP = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_EXPLORER}&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`;
+    
+    const answer = await axios.get(MAP);
+    console.log(this.state.map);
+    this.setState({map: answer.config.url})
+  } catch(error){
+    // console.log(error.response);
+    this.setState({errors: error.response.data.error, displayAlert: true})
+    }
  }
-   identify(error){
-     this.setState({errors: error.response.answer, displayAlert: true, map: '', location: {}})
-   }
+
+  closeAlert = () => {
+    this.setState({displayAlert: false});
+  }
+  //  catch(error){
+    //  this.setState({errors: error.response.answer, displayAlert: true}) //this won't work as an attached func.//
+    // } 
 
  
   render () {
@@ -43,7 +71,7 @@ class App extends React.Component {
           <Alert show={this.state.displayAlert} variant='warning'>
             <Alert.Heading>Oops! Somthing went wrong...</Alert.Heading>
             Error code {this.state.errors}: Cannot process geocode
-            <Button variant='warning' onClick={this.state.displayAlert}></Button>
+            <Button variant='warning' onClick={this.closeAlert}>Close</Button>
           </Alert>
 
           <Form onSubmit={this.getLocation}>
