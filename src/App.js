@@ -52,7 +52,8 @@ getLocation = async (e) => {
     console.log(this.state.map);
     this.setState({map: answer.config.url})
 
-    const WEATHER = `http://localhost:3333/weather?searchQuery=${this.state.searchQuery}`;
+    // const WEATHER = `http://localhost:3333/weather?searchQuery=${this.state.searchQuery}`;
+    const WEATHER = `https://code-fellows-city-explorer-api.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
     const weatherResponse = await axios.get(WEATHER);
     console.log(WEATHER);
     this.setState({forecastArr: weatherResponse.data})
