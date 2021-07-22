@@ -17,6 +17,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './style.css';
 import Alert from 'react-bootstrap/Alert';
+import Weather from './Weather';
+import Image from 'react-bootstrap/Image';
 
 //2 - setup component class
 class App extends React.Component {
@@ -28,7 +30,8 @@ class App extends React.Component {
      location: {},
      map: '',
      errors: '',
-     displayAlert: false
+     displayAlert: false,
+     forecastArr: []
    }
    this.getLocation=this.getLocation.bind(this);
    this.closeAlert=this.closeAlert.bind(this);
@@ -38,31 +41,32 @@ class App extends React.Component {
 
 getLocation = async (e) => {
   try{
-    
     e.preventDefault();
     const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_EXPLORER}&q=${this.state.searchQuery}&format=json`;
-    
     const response = await axios.get(API)
     // console.log('Location IQ Data:', response)
     this.setState({location: response.data[0]})
     
     const MAP = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_EXPLORER}&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`;
-    
     const answer = await axios.get(MAP);
     console.log(this.state.map);
     this.setState({map: answer.config.url})
+
+    const WEATHER = `http://localhost:3333/weather?searchQuery=${this.state.searchQuery}`;
+    const weatherResponse = await axios.get(WEATHER);
+    console.log(WEATHER);
+    this.setState({forecastArr: weatherResponse.data})
+    console.log(this.state.forecastArr);
+
   } catch(error){
     // console.log(error.response);
     this.setState({errors: error.response.data.error, displayAlert: true})
     }
- }
+}
 
   closeAlert = () => {
     this.setState({displayAlert: false});
   }
-  //  catch(error){
-    //  this.setState({errors: error.response.answer, displayAlert: true}) //this won't work as an attached func.//
-    // } 
 
  
   render () {
@@ -70,12 +74,12 @@ getLocation = async (e) => {
         <>
           <Alert show={this.state.displayAlert} variant='warning'>
             <Alert.Heading>Oops! Somthing went wrong...</Alert.Heading>
-            Error code {this.state.errors}: Cannot process geocode
+            Error code {this.state.errors}: Error
             <Button variant='warning' onClick={this.closeAlert}>Close</Button>
           </Alert>
 
           <Form onSubmit={this.getLocation}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicEntry">
               <Form.Label>Location</Form.Label>
               <Form.Control onChange={(e) => this.setState({ searchQuery: e.target.value })}
             placeholder='type city name here...' type='text' />
@@ -83,13 +87,15 @@ getLocation = async (e) => {
                 Location: {this.state.location.display_name}<br />
                 Location latitude: {this.state.location.lat}<br />
                 Location longitude: {this.state.location.lon}<br />
-                <img src={this.state.map} alt='map of selected city'/>
+                <Image src={this.state.map} alt='map of selected city'/>
               </Form.Text>
             </Form.Group>
             <Button variant="primary" type="submit">
             Explore!
             </Button>
         </Form>
+        {this.state.forecastArr.length>0 &&
+        <Weather WEATHER={this.state.forecastArr} searchQuery={this.state.searchQuery}/>}
       </>
     );
   }
