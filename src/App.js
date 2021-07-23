@@ -31,7 +31,9 @@ class App extends React.Component {
      map: '',
      errors: '',
      displayAlert: false,
-     forecastArr: []
+     forecastArr: [],
+     movieList: []
+
    }
    this.getLocation=this.getLocation.bind(this);
    this.closeAlert=this.closeAlert.bind(this);
