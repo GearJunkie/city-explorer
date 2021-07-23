@@ -19,53 +19,46 @@ import './style.css';
 import Alert from 'react-bootstrap/Alert';
 import Weather from './Weather';
 import Image from 'react-bootstrap/Image';
+import Movies from './Movies';
 
 //2 - setup component class
 class App extends React.Component {
- constructor(props) {
-   super(props);
+  constructor(props) {
+    super(props);
 //3 - setup some state in component constructor
-   this.state={
-     searchQuery: '',
-     location: {},
-     map: '',
-     errors: '',
-     displayAlert: false,
-     forecastArr: [],
-     movieList: []
+      this.state={
+        searchQuery: '',
+        location: {},
+        map: '',
+        errors: '',
+        displayAlert: false,
+        // forecastArr: [],
+        // movieList: []
 
-   }
-   this.getLocation=this.getLocation.bind(this);
-   this.closeAlert=this.closeAlert.bind(this);
+      }
+      this.getLocation=this.getLocation.bind(this);
+      this.closeAlert=this.closeAlert.bind(this);
  }
  
  //4 - create shell method(s) for actions
 
-getLocation = async (e) => {
-  try{
-    e.preventDefault();
-    const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_EXPLORER}&q=${this.state.searchQuery}&format=json`;
-    const response = await axios.get(API)
-    // console.log('Location IQ Data:', response)
-    this.setState({location: response.data[0]})
-    
-    const MAP = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_EXPLORER}&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`;
-    const answer = await axios.get(MAP);
-    console.log(this.state.map);
-    this.setState({map: answer.config.url})
+  getLocation = async (e) => {
+    try{
+      e.preventDefault();
+      const LOCATION = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_EXPLORER}&q=${this.state.searchQuery}&format=json`;
+      const response = await axios.get(LOCATION)
+      // console.log('Location IQ Data:', response)
+      this.setState({location: response.data[0]})
+      
+      const MAP = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_EXPLORER}&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`;
+      const answer = await axios.get(MAP);
+      console.log(this.state.map);
+      this.setState({map: answer.config.url})
 
-    // const WEATHER = `http://localhost:3333/weather?searchQuery=${this.state.searchQuery}`;
-    const WEATHER = `https://code-fellows-city-explorer-api.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
-    const weatherResponse = await axios.get(WEATHER);
-    console.log(WEATHER);
-    this.setState({forecastArr: weatherResponse.data})
-    console.log(this.state.forecastArr);
-
-  } catch(error){
-    // console.log(error.response);
-    this.setState({errors: error.response.data.error, displayAlert: true})
-    }
-}
+    } catch(error){
+      this.setState({errors: error.response.data.error, displayAlert: true})
+      }
+  }
 
   closeAlert = () => {
     this.setState({displayAlert: false});
@@ -84,8 +77,7 @@ getLocation = async (e) => {
           <Form onSubmit={this.getLocation}>
             <Form.Group className="mb-3" controlId="formBasicEntry">
               <Form.Label>Location</Form.Label>
-              <Form.Control onChange={(e) => this.setState({ searchQuery: e.target.value })}
-            placeholder='type city name here...' type='text' />
+              <Form.Control onChange={(e) => this.setState({ searchQuery: e.target.value })} placeholder='type city name here...' type='text' />
               <Form.Text className="text-muted">
                 Location: {this.state.location.display_name}<br />
                 Location latitude: {this.state.location.lat}<br />
@@ -96,10 +88,13 @@ getLocation = async (e) => {
             <Button variant="primary" type="submit">
             Explore!
             </Button>
-        </Form>
-        {this.state.forecastArr.length>0 &&
-        <Weather WEATHER={this.state.forecastArr} searchQuery={this.state.searchQuery}/>}
-      </>
+          </Form>
+
+          {this.state.forecastArr.length>0 &&
+          <Weather WEATHER={this.state.forecastArr} searchQuery={this.state.searchQuery}/>}
+          {this.state.moviesArr.length>0 &&
+          <Movies MOVIES={this.state.moviesArr} searchQuery={this.state.searchQuery}/>}
+        </>
     );
   }
 }
