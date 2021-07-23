@@ -26,6 +26,8 @@ class Weather extends React.Component {
     }
   }
 
+//I need to create a nested WeatherDay component that will render a single day's forcast//
+
   render(){
     return(
       <div>

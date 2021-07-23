@@ -26,7 +26,7 @@ class Movies extends React.Component {
     }
   }
 
-
+//I need to create a nested Movie component that will render each individual movie obj from the raw response data//
 
   render(){
     return(
