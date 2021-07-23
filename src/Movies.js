@@ -6,17 +6,24 @@ class Movies extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      moviesList: [],
       searchQuery: '',
-      errors: ''
+      errors: '',
+      moviesArr: []
     }
+    this.getMovies=this.getMovies.bind(this);
   }
 
-  getMovies = async () => {
-    const apiURL = 'https://api.themoviedb.org';
-    const data = await axios.get(`${apiURL}/movies`); //<-- is this the API endpoint? movie or movies?
-    console.log(data);
-    this.setState({moviesList: data.data})
+  getMovies = async (e) => {
+    try{
+      e.preventDefault();
+      const MOVIES = `https://code-fellows-city-explorer-api.herokuapp.com/movies?searchQuery=${this.state.searchQuery}`;
+      const movieResponse = await axios.get(MOVIES);
+      console.log(MOVIES);
+      this.setState({moviesArr: movieResponse.data})
+      console.log(this.state.moviesArr);
+    } catch(error){
+      this.setState({errors: error.MovieResponse.data.error})
+    }
   }
 
 
@@ -24,15 +31,14 @@ class Movies extends React.Component {
   render(){
     return(
       <div>
-        {this.props.moviesList.length && this.state.moviesList.map((movieList, idx) => {
-          return <Card key={idx} style={{ width: '18rem' }}>
+        {this.props.MOVIES.map((value, idx) => 
+          <Card key={idx} style={{ width: '18rem' }}>
           <Card.Text>{value.title}, {value.description}, {value.popularity}, {value.image_url}</Card.Text>
         </Card>
-        })}
+        )}
       </div>
-      )
-      }
-  
+    )
+  }
 }
 
 export default Movies;
