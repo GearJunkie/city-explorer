@@ -6,8 +6,8 @@ class Movies extends React.Component {
   render() {
     return (
     <div className='movie-list'>
-      {this.props.moviesArr.length && this.props.moviesArr.map((movie, idx) => {
-        return <Movie key={idx} movie={movie} />
+      {this.props.movies.length && this.props.movies.map((movies, idx) => {
+        return <Movie key={idx} movies={movies} />
       })}
     </div>
     )
