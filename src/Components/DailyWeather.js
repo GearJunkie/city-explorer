@@ -5,9 +5,7 @@ class DailyWeather extends React.Component {
     return (
       <div className='daily-forecast'>
         <h2>{this.props.weather.date}</h2>
-        <p>{this.props.weather.lowtemp}</p>
-        <p>{this.props.weather.hightemp}</p>
-        <p>{this.props.weather.description}</p>
+        <p>{this.props.weather.lowtemp} {this.props.weather.hightemp} {this.props.weather.description}</p>
       </div>
     )
   }

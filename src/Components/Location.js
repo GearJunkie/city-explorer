@@ -5,9 +5,9 @@ class Location extends React.Component {
   
   render() {
     return (
-    <Card style={{ width: '18rem' }} className={locationCard}>
+    <Card style={{ width: '18rem' }}>
       <Card.Body>
-        <Card.Title>{this.props.location.display_name}</Card.Title>
+        <Card.Title>Location: {this.props.location.display_name}</Card.Title>
         <Card.Text>Latitude: {this.props.location.lat}</Card.Text>
         <Card.Text>Longitude: {this.props.location.lon}</Card.Text>
       </Card.Body>

@@ -5,7 +5,7 @@ class Weather extends React.Component {
   render () {
     return (
       <div className='weather-forecast'>
-        {this.props.forecastArr.map( (weather, idx) => {
+        {this.props.forecast.map( (weather, idx) => {
           return <DailyWeather key={idx} weather={weather} />
         })}
       </div>
