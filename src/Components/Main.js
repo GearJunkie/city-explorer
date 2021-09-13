@@ -48,7 +48,7 @@ class Main extends React.Component {
     }
   }
   
-
+  
   getMovies = async () => {
     try {
       const MOVIES = `https://code-fellows-city-explorer-api.herokuapp.com/movies?searchQuery=${this.state.searchQuery}`;
@@ -72,6 +72,7 @@ class Main extends React.Component {
       this.getMovies();
       this.getWeather();
   }
+  
 
   closeAlert = () => {
     this.setState({displayAlert: false});
